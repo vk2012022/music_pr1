@@ -6,4 +6,6 @@ urlpatterns = [
     path('add/', views.add_music_piece, name='add_music_piece'),
     path('list/', views.list_music_pieces, name='list_music_pieces'),
     path('detail/<int:id>/', views.detail_music_piece, name='detail_music_piece'),
+    path('history/', views.project_history, name='project_history'),  # Новый маршрут для страницы истории проекта
 ]
+

@@ -26,3 +26,6 @@ def list_music_pieces(request):
 def detail_music_piece(request, id):
     music_piece = get_object_or_404(MusicPiece, id=id)
     return render(request, 'music_foto/detail_music_piece.html', {'music_piece': music_piece})
+
+def project_history(request):
+    return render(request, 'music_foto/project_history.html')
