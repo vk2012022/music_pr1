@@ -1,0 +1,21 @@
+{% extends 'music_foto/base.html' %}
+
+{% block title %}Все произведения{% endblock %}
+
+{% block content %}
+<h2>Список музыкальных произведений</h2>
+<div class="row">
+    {% for piece in music_pieces %}
+    <div class="col-md-4 mb-4">
+        <div class="card bg-dark text-white">
+            <img src="{{ piece.photo.url }}" class="card-img-top" alt="{{ piece.title }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ piece.title }}</h5>
+                <p class="card-text">Дата добавления: {{ piece.date_added }}</p>
+                <a href="{% url 'detail_music_piece' piece.id %}" class="btn btn-primary">Слушать</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'music_foto/base.html' %}
+
+{% block title %}{{ music_piece.title }}{% endblock %}
+
+{% block content %}
+<div id="detail-container" class="text-center">
+    <div id="text-elements">
+        <h2>{{ music_piece.title }}</h2>
+        <p>{{ music_piece.description }}</p>
+    </div>
+    <div id="image-container">
+        <img id="music-image" src="{{ music_piece.photo.url }}" class="img-fluid mb-3" alt="{{ music_piece.title }}" onclick="toggleFullscreen()">
+    </div>
+    <audio id="music-player" controls>
+        <source src="{{ music_piece.audio.url }}" type="audio/mp3">
+        Ваш браузер не поддерживает аудио элемент.
+    </audio>
+</div>
+
+<script>
+    const imageContainer = document.getElementById('image-container');
+    const image = document.getElementById('music-image');
+    const audio = document.getElementById('music-player');
+    const textElements = document.getElementById('text-elements');
+    const container = document.getElementById('detail-container');
+
+    function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+            imageContainer.requestFullscreen().then(() => {
+                image.style.width = "100%";
+                image.style.height = "100vh";
+                image.style.objectFit = "cover";
+                image.style.cursor = "pointer";
+                textElements.style.display = "none";
+                audio.play();
+                audio.controls = false;
+            }).catch(err => {
+                console.error(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
+            });
+        } else {
+            document.exitFullscreen().then(() => {
+                resetView();
+            }).catch(err => {
+                console.error(`Error attempting to exit fullscreen mode: ${err.message} (${err.name})`);
+            });
+        }
+    }
+
+    function resetView() {
+        image.style.width = "";
+        image.style.height = "";
+        image.style.objectFit = "";
+        textElements.style.display = "";
+        audio.pause();
+        audio.controls = true;
+    }
+
+    document.addEventListener('fullscreenchange', () => {
+        if (!document.fullscreenElement) {
+            resetView();
+        }
+    });
+</script>
+{% endblock %}
