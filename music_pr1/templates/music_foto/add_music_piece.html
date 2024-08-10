@@ -1,10 +1,10 @@
 {% extends 'music_foto/base.html' %}
 {% load custom_filters %}
 
-{% block title %}Добавить произведение{% endblock %}
+{% block title %}{% if edit %}Редактировать{% else %}Добавить{% endif %} произведение{% endblock %}
 
 {% block content %}
-<h2>Добавить музыкальное произведение</h2>
+<h2>{% if edit %}Редактировать{% else %}Добавить{% endif %} музыкальное произведение</h2>
 
 <!-- Отображение сообщений -->
 {% if messages %}
@@ -35,6 +35,6 @@
         <label for="{{ form.audio.id_for_label }}">Аудио файл (MP3)</label>
         {{ form.audio|add_class:"form-control" }}
     </div>
-    <button type="submit" class="btn btn-primary">Добавить</button>
+    <button type="submit" class="btn btn-primary">{% if edit %}Сохранить изменения{% else %}Добавить{% endif %}</button>
 </form>
 {% endblock %}

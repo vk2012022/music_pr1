@@ -1,9 +1,9 @@
 {% extends 'music_foto/base.html' %}
 
-{% block title %}Все произведения{% endblock %}
+{% block title %}Все музыкальные произведения{% endblock %}
 
 {% block content %}
-<h2>Список музыкальных произведений</h2>
+<h2 class="text-center mb-5">Список музыкальных произведений</h2>
 <div class="row">
     {% for piece in music_pieces %}
     <div class="col-md-4 mb-4">
@@ -11,11 +11,14 @@
             <img src="{{ piece.photo.url }}" class="card-img-top" alt="{{ piece.title }}">
             <div class="card-body">
                 <h5 class="card-title">{{ piece.title }}</h5>
-                <p class="card-text">Дата добавления: {{ piece.date_added }}</p>
+                <p class="card-text">Дата добавления: {{ piece.date_added|date:"d M Y H:i" }}</p>
                 <a href="{% url 'detail_music_piece' piece.id %}" class="btn btn-primary">Слушать</a>
+                <a href="{% url 'edit_music_piece' piece.id %}" class="btn btn-secondary">Редактировать</a>
             </div>
         </div>
     </div>
+    {% empty %}
+        <p class="text-center">Пока нет добавленных музыкальных произведений.</p>
     {% endfor %}
 </div>
 {% endblock %}
