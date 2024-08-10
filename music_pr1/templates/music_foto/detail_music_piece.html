@@ -1,36 +1,36 @@
 {% extends 'music_foto/base.html' %}
 
-{% block title %}{{ music_piece.title }}{% endblock %}
+{% block title %}Все произведения{% endblock %}
 
 {% block content %}
-<div id="detail-container" class="text-center">
-    <div id="text-elements">
+<div id="music-list" class="container">
+    {% for music_piece in music_pieces %}
+    <div class="music-item mb-4">
         <h2>{{ music_piece.title }}</h2>
         <p>{{ music_piece.description }}</p>
+        <div class="image-container">
+            <img class="music-image img-fluid" src="{{ music_piece.photo.url }}" alt="{{ music_piece.title }}" onclick="toggleFullscreen(this)">
+        </div>
+        <audio class="music-player" controls>
+            <source src="{{ music_piece.audio.url }}" type="audio/mp3">
+            Ваш браузер не поддерживает аудио элемент.
+        </audio>
     </div>
-    <div id="image-container">
-        <img id="music-image" src="{{ music_piece.photo.url }}" class="img-fluid mb-3" alt="{{ music_piece.title }}" onclick="toggleFullscreen()">
-    </div>
-    <audio id="music-player" controls>
-        <source src="{{ music_piece.audio.url }}" type="audio/mp3">
-        Ваш браузер не поддерживает аудио элемент.
-    </audio>
+    {% endfor %}
 </div>
 
 <script>
-    const imageContainer = document.getElementById('image-container');
-    const image = document.getElementById('music-image');
-    const audio = document.getElementById('music-player');
-    const textElements = document.getElementById('text-elements');
-    const container = document.getElementById('detail-container');
+    function toggleFullscreen(imageElement) {
+        const imageContainer = imageElement.closest('.image-container');
+        const audio = imageContainer.nextElementSibling;
+        const textElements = imageContainer.previousElementSibling.previousElementSibling;
 
-    function toggleFullscreen() {
         if (!document.fullscreenElement) {
             imageContainer.requestFullscreen().then(() => {
-                image.style.width = "100%";
-                image.style.height = "100vh";
-                image.style.objectFit = "cover";
-                image.style.cursor = "pointer";
+                imageElement.style.width = "100%";
+                imageElement.style.height = "100vh";
+                imageElement.style.objectFit = "cover";
+                imageElement.style.cursor = "pointer";
                 textElements.style.display = "none";
                 audio.play();
                 audio.controls = false;
@@ -39,17 +39,21 @@
             });
         } else {
             document.exitFullscreen().then(() => {
-                resetView();
+                resetView(imageElement);
             }).catch(err => {
                 console.error(`Error attempting to exit fullscreen mode: ${err.message} (${err.name})`);
             });
         }
     }
 
-    function resetView() {
-        image.style.width = "";
-        image.style.height = "";
-        image.style.objectFit = "";
+    function resetView(imageElement) {
+        const imageContainer = imageElement.closest('.image-container');
+        const audio = imageContainer.nextElementSibling;
+        const textElements = imageContainer.previousElementSibling.previousElementSibling;
+
+        imageElement.style.width = "";
+        imageElement.style.height = "";
+        imageElement.style.objectFit = "";
         textElements.style.display = "";
         audio.pause();
         audio.controls = true;
@@ -57,7 +61,10 @@
 
     document.addEventListener('fullscreenchange', () => {
         if (!document.fullscreenElement) {
-            resetView();
+            const fullScreenImage = document.querySelector('.music-image[style*="height: 100vh"]');
+            if (fullScreenImage) {
+                resetView(fullScreenImage);
+            }
         }
     });
 </script>

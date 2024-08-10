@@ -20,12 +20,9 @@ def add_music_piece(request):
     return render(request, 'music_foto/add_music_piece.html', {'form': form})
 
 def list_music_pieces(request):
+    # Получаем все музыкальные произведения из базы данных
     music_pieces = MusicPiece.objects.all()
-    return render(request, 'music_foto/list_music_pieces.html', {'music_pieces': music_pieces})
-
-def detail_music_piece(request, id):
-    music_piece = get_object_or_404(MusicPiece, id=id)
-    return render(request, 'music_foto/detail_music_piece.html', {'music_piece': music_piece})
+    return render(request, 'music_foto/detail_music_piece.html', {'music_pieces': music_pieces})
 
 def project_history(request):
     return render(request, 'music_foto/project_history.html')
