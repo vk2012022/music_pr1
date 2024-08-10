@@ -1,0 +1,95 @@
+{% extends 'music_foto/base.html' %}
+
+{% block title %}Все произведения - Скроллинг{% endblock %}
+
+{% block content %}
+<h2 class="text-center mb-5">Все музыкальные произведения</h2>
+<div class="scroll-container">
+    {% for piece in music_pieces %}
+        <div class="music-piece mb-5">
+            <h3 class="text-center">{{ piece.title }}</h3>
+            <p class="text-center">{{ piece.description }}</p>
+            <div class="image-container text-center">
+                <img src="{{ piece.photo.url }}" alt="{{ piece.title }}" class="music-image img-fluid" data-audio="{{ piece.audio.url }}">
+            </div>
+            <div class="text-center mt-3">
+                <audio controls class="audio-player" style="width: 100%; max-width: 600px;">
+                    <source src="{{ piece.audio.url }}" type="audio/mpeg">
+                    Ваш браузер не поддерживает элемент audio.
+                </audio>
+            </div>
+        </div>
+    {% empty %}
+        <p class="text-center">Пока нет добавленных музыкальных произведений.</p>
+    {% endfor %}
+</div>
+
+<style>
+    .scroll-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .music-piece {
+        width: 100%;
+        max-width: 800px;
+        text-align: center;
+    }
+    .music-image {
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+    .music-image:hover {
+        opacity: 0.8;
+    }
+</style>
+
+<script>
+    // Добавляем обработчик событий для каждого изображения
+    var images = document.getElementsByClassName("music-image");
+    for (var i = 0; i < images.length; i++) {
+        images[i].onclick = function(){
+            if (!document.fullscreenElement) {
+                openFullscreen(this);
+            } else {
+                closeFullscreen();
+            }
+        }
+    }
+
+    // Открытие изображения на весь экран
+    function openFullscreen(element) {
+        if (element.requestFullscreen) {
+            element.requestFullscreen();
+        } else if (element.mozRequestFullScreen) { // Firefox
+            element.mozRequestFullScreen();
+        } else if (element.webkitRequestFullscreen) { // Chrome, Safari and Opera
+            element.webkitRequestFullscreen();
+        } else if (element.msRequestFullscreen) { // IE/Edge
+            element.msRequestFullscreen();
+        }
+    }
+
+    // Закрытие полноэкранного режима
+    function closeFullscreen() {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) { // Firefox
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) { // Chrome, Safari and Opera
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { // IE/Edge
+            document.msExitFullscreen();
+        }
+    }
+
+    // Закрытие полноэкранного режима при нажатии клавиши Esc
+    document.addEventListener('keydown', function(event) {
+        if (event.key === "Escape") {
+            if (document.fullscreenElement) {
+                closeFullscreen();
+            }
+        }
+    });
+</script>
+{% endblock %}

@@ -29,3 +29,7 @@ def detail_music_piece(request, id):
 
 def project_history(request):
     return render(request, 'music_foto/project_history.html')
+
+def scroll_music_pieces(request):
+    music_pieces = MusicPiece.objects.all()
+    return render(request, 'music_foto/scroll_music_pieces.html', {'music_pieces': music_pieces})
